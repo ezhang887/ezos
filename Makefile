@@ -1,19 +1,30 @@
+OBJECTS = loader.o kmain.o
+CC = gcc
+CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
+LDFLAGS = -T link.ld -melf_i386
+AS = nasm
+ASFLAGS = -f elf
+
 .PHONY: all
-all: bochs
+all: kernel.elf
 
 .PHONY: clean
 clean:
-	rm -f *.o iso/boot/*.elf *.iso
+	rm -f *.o *.elf *.iso
 
-loader.o:
-	nasm -f elf32 loader.s
+.PHONY: run
+run: ezos.iso
+	bochs -f .bochsrc -q
 
-kernel.elf: loader.o
-	ld -T link.ld -melf_i386 loader.o -o iso/boot/kernel.elf
+kernel.elf: $(OBJECTS)
+	ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
 
 ezos.iso: kernel.elf
+	cp kernel.elf iso/boot/kernel.elf
 	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset utf8 -quiet -boot-info-table -o ezos.iso iso
 
-.PHONY: bochs
-bochs: ezos.iso
-	bochs -f .bochsrc -q
+%.o: %.c
+	$(CC) $(CFLAGS) $< -o $@
+
+%.o: %.s
+	$(AS) $(ASFLAGS) $< -o $@
