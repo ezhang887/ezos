@@ -4,8 +4,6 @@
  * Framebuffer interface.
  */
 
-#define FB_MMIO_BASE 0x000B8000
-
 #define FB_COLOR_BLACK 0
 #define FB_COLOR_BLUE 1
 #define FB_COLOR_GREEN 2
@@ -23,4 +21,12 @@
 #define FB_COLOR_LIGHT_BROWN 14
 #define FB_COLOR_WHITE 15
 
+/*
+ * Write a character into a cell in the framebuffer.
+ */
 void fb_write_cell(unsigned int position, char c, unsigned char fb, unsigned char bg);
+
+/*
+ * Move the framebuffer's cursor.
+ */
+void fb_move_cursor(unsigned short pos);
