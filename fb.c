@@ -28,12 +28,12 @@ void fb_move_cursor(unsigned short pos) {
     outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
     outb(FB_DATA_PORT, pos & 0x00FF);
 
-    // `pos * 2` since each entry in the fb is 2 bytes.
     fb_curr_pos = pos;
 }
 
 void fb_write(char *buf, unsigned int len) {
     for (unsigned int i = 0; i < len; i++) {
+        // `fb_curr_pos * 2` since each entry in the fb is 2 bytes.
         fb_write_cell(2 * fb_curr_pos, buf[i], FB_COLOR_WHITE, FB_COLOR_BLACK);
         fb_move_cursor(fb_curr_pos + 1);
     }
