@@ -1,6 +1,4 @@
-#include "fb.h"
-
-static char message[] = "Hello World!";
+#include "ktests.h"
 
 void kmain() {
     /*
@@ -9,6 +7,7 @@ void kmain() {
 
     fb_move_cursor(80);
     */
-    fb_clear();
-    fb_write(message, sizeof(message));
+
+    test_newline_and_tab();
+    //test_scrolling();
 }

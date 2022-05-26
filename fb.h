@@ -39,5 +39,4 @@ void fb_write(char *buf, unsigned int len);
 /*
  * Clear the framebuffer.
  */
-
 void fb_clear();
