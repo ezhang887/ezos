@@ -1,4 +1,5 @@
-OBJECTS = loader.o kmain.o fb.o io.o ktests.o
+C_OBJECTS = $(patsubst %.c,%.o,$(wildcard *.c))
+ASM_OBJECTS = $(patsubst %.s,%.o,$(wildcard *.s))
 CC = gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
 LDFLAGS = -T link.ld -melf_i386
@@ -16,8 +17,8 @@ clean:
 run: ezos.iso
 	bochs -f .bochsrc -q
 
-kernel.elf: $(OBJECTS)
-	ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
+kernel.elf: $(C_OBJECTS) $(ASM_OBJECTS)
+	ld $(LDFLAGS) $(C_OBJECTS) $(ASM_OBJECTS) -o kernel.elf
 
 ezos.iso: kernel.elf
 	cp kernel.elf iso/boot/kernel.elf
