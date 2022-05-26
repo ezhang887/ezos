@@ -30,3 +30,14 @@ void fb_write_cell(unsigned int position, char c, unsigned char fb, unsigned cha
  * Move the framebuffer's cursor.
  */
 void fb_move_cursor(unsigned short pos);
+
+/*
+ * Write a buffer to the framebuffer.
+ */
+void fb_write(char *buf, unsigned int len);
+
+/*
+ * Clear the framebuffer.
+ */
+
+void fb_clear();
