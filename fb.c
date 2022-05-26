@@ -18,7 +18,7 @@ static unsigned int fb_curr_col = 0;
 static void fb_newline();
 static void fb_scroll();
 
-void fb_write_cell(unsigned int position, char c, unsigned char fg, unsigned char bg) {
+int fb_write_cell(unsigned int position, char c, unsigned char fg, unsigned char bg) {
     if (c == '\n') {
         fb_newline();
     } else if (c == '\t') {
@@ -29,9 +29,11 @@ void fb_write_cell(unsigned int position, char c, unsigned char fg, unsigned cha
         fb[position * 2] = c;
         fb[position * 2 + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
     }
+
+    return 0;
 }
 
-void fb_move_cursor(unsigned short pos) {
+int fb_move_cursor(unsigned short pos) {
     // Send upper half of `pos`
     outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
     outb(FB_DATA_PORT, (pos >> 8) & 0x00FF);
@@ -39,9 +41,11 @@ void fb_move_cursor(unsigned short pos) {
     // Send lower half of `pos`
     outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
     outb(FB_DATA_PORT, pos & 0x00FF);
+
+    return 0;
 }
 
-void fb_write(char *buf, unsigned int len) {
+int fb_write(char *buf, unsigned int len) {
     for (unsigned int i = 0; i < len; i++) {
         int fb_curr_pos = fb_curr_row * FB_COLS + fb_curr_col;
         fb_write_cell(fb_curr_pos, buf[i], FB_COLOR_WHITE, FB_COLOR_BLACK);
@@ -59,9 +63,11 @@ void fb_write(char *buf, unsigned int len) {
             fb_move_cursor(fb_curr_pos + 1);
         }
     }
+
+    return 0;
 }
 
-void fb_clear() {
+int fb_clear() {
     int old_pos = fb_curr_row * FB_COLS + fb_curr_col;
     for (unsigned int i = 0; i < FB_ROWS; i++) {
         for (unsigned int j = 0; j < FB_COLS; j++) {
@@ -71,9 +77,11 @@ void fb_clear() {
         }
     }
     fb_move_cursor(old_pos);
+
+    return 0;
 }
 
-void fb_newline() {
+static void fb_newline() {
     if (fb_curr_row >= FB_ROWS - 1) {
         fb_scroll();
     } else {
@@ -84,7 +92,7 @@ void fb_newline() {
     fb_move_cursor(fb_curr_row * FB_COLS + fb_curr_col);
 }
 
-void fb_scroll() {
+static void fb_scroll() {
     int fb_size_to_copy = FB_COLS * FB_ROWS - FB_COLS;
     for (int i = 0; i < fb_size_to_copy; i++) {
         fb[i] = fb[i + FB_COLS];

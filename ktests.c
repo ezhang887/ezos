@@ -1,4 +1,6 @@
 #include "ktests.h"
+#include "fb.h"
+#include "serial.h"
 
 void test_newline_and_tab() {
     fb_clear();
@@ -17,4 +19,11 @@ void test_scrolling() {
             fb_write(&value, 1);
         }
     }
+}
+
+void test_serial_write() {
+    // Out should be in `com1.out` (configured in .bochsrc)
+    serial_init(SERIAL_COM1, 56700);
+    char message[] = "Hello World!\tHello World!\nHello World!\tHello World!\n";
+    serial_write(SERIAL_COM1, message, sizeof(message));
 }

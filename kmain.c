@@ -10,4 +10,5 @@ void kmain() {
 
     test_newline_and_tab();
     //test_scrolling();
+    test_serial_write();
 }

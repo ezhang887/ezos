@@ -24,19 +24,19 @@
 /*
  * Write a character into a cell in the framebuffer.
  */
-void fb_write_cell(unsigned int position, char c, unsigned char fb, unsigned char bg);
+int fb_write_cell(unsigned int position, char c, unsigned char fb, unsigned char bg);
 
 /*
  * Move the framebuffer's cursor.
  */
-void fb_move_cursor(unsigned short pos);
+int fb_move_cursor(unsigned short pos);
 
 /*
  * Write a buffer to the framebuffer.
  */
-void fb_write(char *buf, unsigned int len);
+int fb_write(char *buf, unsigned int len);
 
 /*
  * Clear the framebuffer.
  */
-void fb_clear();
+int fb_clear();
