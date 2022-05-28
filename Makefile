@@ -1,5 +1,5 @@
-C_OBJECTS = $(patsubst %.c,%.o,$(wildcard *.c))
-ASM_OBJECTS = $(patsubst %.s,%.o,$(wildcard *.s))
+C_OBJECTS = $(patsubst %.c,%.o,$(wildcard kernel/*.c))
+ASM_OBJECTS = $(patsubst %.s,%.o,$(wildcard kernel/*.s))
 CC = gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
 LDFLAGS = -T link.ld -melf_i386
@@ -11,7 +11,7 @@ all: kernel.elf
 
 .PHONY: clean
 clean:
-	rm -f *.o *.elf *.iso
+	rm -f kernel/*.o *.elf *.iso
 
 .PHONY: run
 run: ezos.iso
@@ -24,8 +24,8 @@ ezos.iso: kernel.elf
 	cp kernel.elf iso/boot/kernel.elf
 	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset utf8 -quiet -boot-info-table -o ezos.iso iso
 
-%.o: %.c
+kernel/%.o: kernel/%.c
 	$(CC) $(CFLAGS) $< -o $@
 
-%.o: %.s
+kernel/%.o: kernel/%.s
 	$(AS) $(ASFLAGS) $< -o $@
