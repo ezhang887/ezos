@@ -1,4 +1,5 @@
 #include "ktests.h"
+#include "segments.h"
 
 void kmain() {
     /*
@@ -7,6 +8,8 @@ void kmain() {
 
     fb_move_cursor(80);
     */
+
+    segments_init();
 
     test_newline_and_tab();
     //test_scrolling();
