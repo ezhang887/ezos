@@ -13,4 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-        sudo apt install build-essential nasm genisoimage && make
+          sudo apt update
+          sudo apt install build-essential nasm genisoimage
+          make
